@@ -8,7 +8,10 @@ import { sequelize } from './uteis/keys';
 
 const app = express();
 
-app.use(cors()); // cross origin request
+app.use(cors({
+    credentials: true,
+    origin: 'http://localhost:4200'
+})); // cross origin request
 app.use(express.json()); // usa json como resposta default
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // extrai os cookies do header e popula req.cookies

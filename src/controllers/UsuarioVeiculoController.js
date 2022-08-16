@@ -8,15 +8,18 @@ router.get('/', async (req, res) => {
     let meusveiculos;
     try {
         meusveiculos = await UsuarioVeiculoModel.findAll({
+            attributes: ['id', 'placa'],
             where: {
                 id_usuario: req.context.me.id
             },
             include: [
                 {
                     model: VeiculoModel,
+                    attributes: ['marca', 'modelo', 'ano'],
                     required: true, // inner join
                 },
-            ]
+            ],
+            raw: true
         });
     } catch (ex) {
         console.log(`Erro ao consultar veiculos: ${ex}`);
@@ -42,6 +45,7 @@ router.post('/:id', async (req, res) => {
     try {
         await UsuarioVeiculoModel.create({
             id: prxId + 1,
+            placa: req.body.placa,
             id_usuario: req.context.me.id,
             id_veiculo: veiculo.id
         });

@@ -14,20 +14,17 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    let response;
     try {
         await VeiculoModel.create({
-            placa: req.body.placa,
             marca: req.body.marca,
             modelo: req.body.modelo,
             ano: req.body.ano
         });
-        response = "sucesso";
+        return res.send({success: true, output: null, message: "Veiculo cadastrado!"});
     } catch(erro) {
         console.log(`Erro ao inserir veiculo: ${erro}`);
-        response = "erro";
+        return res.send({success: false, output: null, message: "Erro ao cadastrar veiculo!"});
     }
-    return res.send(response);
 });
 
 export default router;

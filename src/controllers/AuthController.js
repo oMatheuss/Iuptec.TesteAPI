@@ -131,7 +131,7 @@ router.use(async (req, res, next) => {
 
 
 router.get('/logout', async (req, res) => {
-    res.clearCookie("token", {
+    res.clearCookie("refreshtoken", {
         httpOnly: true,
         //sameSite: true,
         //secure: true

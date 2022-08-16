@@ -9,14 +9,6 @@ const VeiculoModel = Veiculo.init({
         primaryKey: true,
         autoIncrement: true,
     },
-    placa: {
-        type: DataTypes.STRING(7),
-        unique: true,
-        allowNull: false,
-        validate: {
-            is: /^[0-9A-Z]{7}$/i,
-        },
-    },
     marca: {
         type: DataTypes.STRING,
         allowNull: false,
