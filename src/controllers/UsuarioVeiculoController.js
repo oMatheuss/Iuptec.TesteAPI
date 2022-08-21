@@ -22,15 +22,14 @@ router.get('/', async (req, res) => {
             raw: true
         });
     } catch (ex) {
-        console.log(`Erro ao consultar veiculos: ${ex}`);
         return res.send({success: false, output: null, message: "Erro ao consultar veiculos!"});
     }
     return res.send({success: true, output: meusveiculos, message: "Ok!"});
 });
 
 // Insere o veiculo da tabela de veiculos para esse usuario
-router.post('/:id', async (req, res) => {
-    let veiculo = await VeiculoModel.findByPk(req.params.id);
+router.post('/', async (req, res) => {
+    let veiculo = await VeiculoModel.findByPk(req.body.id_veiculo);
 
     if (!veiculo) {
         return res.send({success: false, output: null, message: "Veiculo inexistente!"});
@@ -50,17 +49,20 @@ router.post('/:id', async (req, res) => {
             id_veiculo: veiculo.id
         });
     } catch (ex) {
-        console.log(`Erro ao inserir veiculo: ${ex}`);
-        return res.send({success: false, output: null, message: "Erro ao adicionar veiculo!"});
+		if (ex.name === "SequelizeUniqueConstraintError" && ex.errors[0]?.path === "placa") {
+        	return res.send({success: false, output: null, message: "Erro ao adicionar veiculo! A placa informada já existe."});
+		} else {
+			return res.send({success: false, output: null, message: "Erro ao adicionar veiculo!"});
+		}
     }
     return res.send({success: true, output: null, message: "Veiculo adicionado com sucesso!"});
 });
 
 // Deleta um veiculo do usuario
-router.delete('/:id', async (req, res) => {
+router.delete('/', async (req, res) => {
     let veiculo = await UsuarioVeiculoModel.findOne({
         where: {
-            id: req.params.id,
+            id: req.query.id,
             id_usuario: req.context.me.id
         }
     });
@@ -78,7 +80,6 @@ router.delete('/:id', async (req, res) => {
             }
         });
     } catch (ex) {
-        console.log(`Erro ao remover veiculo: ${ex}`);
         return res.send({success: false, output: null, message: "Erro ao remover veiculo!"});
     }
     return res.send({success: true, output: null, message: "Veiculo removido com sucesso!"});

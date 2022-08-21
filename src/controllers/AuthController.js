@@ -2,6 +2,7 @@ import { Router } from "express";
 import { UsuarioModel } from "../models";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { cookiecfg } from '../uteis/keys';
 
 const router = Router();
 
@@ -35,11 +36,7 @@ router.post('/login', async(req, res) => {
         expiresIn: "1d",
     });
 
-    res.cookie('refreshtoken', refreshtoken, {
-        httpOnly: true,
-        //sameSite: true,
-        //secure: true
-    });
+    res.cookie('refreshtoken', refreshtoken, {...cookiecfg});
 
     let accesstoken = jwt.sign({
         id: user.id
@@ -70,7 +67,6 @@ router.post('/signup', async (req, res) => {
         });
         return res.send({success: true, output: null, message: "Cadastro realizado com sucesso!"});
     } catch(erro) {
-        console.log(`Erro ao inserir usuario: ${erro}`);
         return res.send({success: false, output: null, message: "Falha ao realizar cadastro!"});
     }
 });
@@ -90,7 +86,6 @@ router.get('/refreshtoken', (req, res) => {
             algorithm: 'HS256'
         });
     } catch (erro) {
-        console.log(`Erro ao inserir usuario: ${erro}`);
         return res.send({success: false, output: 401, message: "Refresh token invalido!"});
     }
 
@@ -113,14 +108,12 @@ router.use(async (req, res, next) => {
 
     sToken = sToken.substring(7); // remove 'Bearer '
     let token;
-    console.log(sToken);
 
     try {
         token = jwt.verify(sToken, process.env.JWT_SECRET, {
             algorithm: 'HS256'
         });
     } catch (erro) {
-        console.log(`Erro ao inserir usuario: ${erro}`);
         return res.send({success: false, output: 401, message: "Token invalido!"});
     }
 
@@ -131,11 +124,7 @@ router.use(async (req, res, next) => {
 
 
 router.get('/logout', async (req, res) => {
-    res.clearCookie("refreshtoken", {
-        httpOnly: true,
-        //sameSite: true,
-        //secure: true
-    });
+    res.clearCookie("refreshtoken", cookiecfg);
     return res.send({success: true, output: "", message: "Logout efetuado com sucesso!"});
 });
 

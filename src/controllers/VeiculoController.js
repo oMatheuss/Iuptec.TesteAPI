@@ -5,12 +5,12 @@ const router = Router();
 
 router.get('/', async(req, res) => {
     let veiculos = await VeiculoModel.findAll();
-    return res.send(veiculos);
+    return res.send({success: true, output: veiculos, message: "Ok"});
 });
 
 router.get('/:id', async (req, res) => {
     let veiculo = await VeiculoModel.findByPk(req.params.id);
-    return res.send(veiculo);
+    return res.send({success: true, output: veiculo, message: "Ok"});
 });
 
 router.post('/', async (req, res) => {
@@ -22,7 +22,6 @@ router.post('/', async (req, res) => {
         });
         return res.send({success: true, output: null, message: "Veiculo cadastrado!"});
     } catch(erro) {
-        console.log(`Erro ao inserir veiculo: ${erro}`);
         return res.send({success: false, output: null, message: "Erro ao cadastrar veiculo!"});
     }
 });

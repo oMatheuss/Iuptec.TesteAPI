@@ -10,7 +10,7 @@ const app = express();
 
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:4200'
+    origin: process.env.CORS_ALLOWED_ORIGIN
 })); // cross origin request
 app.use(express.json()); // usa json como resposta default
 app.use(express.urlencoded({ extended: true }));
