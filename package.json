@@ -4,8 +4,9 @@
   "description": "API node para o teste da Iuptec.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js",
-    "test": "node src/index.js"
+    "dev": "nodemon --exec babel-node src/index.js",
+    "build": "babel src -d build",
+    "start": "node build/index.js"
   },
   "keywords": [
     "api",
@@ -14,9 +15,10 @@
   "author": "Matheus Silva Moura",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.18.10",
     "@babel/core": "^7.18.10",
-    "@babel/node": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
+    "@babel/node": "^7.18.10",
     "nodemon": "^2.0.19"
   },
   "dependencies": {
